@@ -1,0 +1,5 @@
+parameter	batas_harian_dewasa	satuan	sumber_referensi
+Garam (Natrium)	2000	mg	https://www.heartfoundation.org.au/sodium-and-salt-converter
+Energi (Kalori) Laki Laki	3000	kkal	https://www.halodoc.com/artikel/catat-ini-jumlah-minimal-kalori-yang-harus-dipenuhi-saat-diet?srsltid=AfmBOopUTRAidGZg77UAfwfpXt6Rop0_b04SluNWA8btlDoJa2aWRTme
+Energi (Kalori) Perempuan	2400	kkal	https://www.halodoc.com/artikel/catat-ini-jumlah-minimal-kalori-yang-harus-dipenuhi-saat-diet?srsltid=AfmBOopUTRAidGZg77UAfwfpXt6Rop0_b04SluNWA8btlDoJa2aWRTme
+MSG (Boolean)	0	mg/kg bb	BPOM Peraturan No. 31 Tahun 2018

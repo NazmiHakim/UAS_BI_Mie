@@ -1,0 +1,9 @@
+pandas
+numpy
+minio
+psycopg2-binary
+sqlalchemy
+streamlit
+duckdb
+openpyxl
+jupyterlab
