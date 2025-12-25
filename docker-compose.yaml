@@ -1,26 +1,24 @@
 version: '3.8'
 
 services:
-  # 1. DATA LAKE STORAGE (MinIO)
-  # Ini pengganti Amazon S3 / Google Cloud Storage
   minio:
+    restart: always
     image: minio/minio
     container_name: datalake_minio
     ports:
-      - "9000:9000"  # Port API
-      - "9001:9001"  # Port Console (Buka di Browser)
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: "admin"
       MINIO_ROOT_PASSWORD: "password123"
     command: server /data --console-address ":9001"
     volumes:
-      - ./minio_data:/data # Data akan tersimpan di folder laptop 'minio_data'
+      - ./minio_data:/data
 
-  # 2. DATA WAREHOUSE (PostgreSQL)
-  # Tempat menyimpan data final yang sudah bersih (Tabel Relation)
   warehouse:
     image: postgres:13
     container_name: warehouse_postgres
+    restart: always
     environment:
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "password123"
@@ -30,18 +28,17 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
 
-  # 3. PROCESSING ENGINE & APP (Python)
-  # Tempat kalian coding ELT dan menjalankan Streamlit
   data-app:
+    restart: always
     build:
       context: .
       dockerfile: docker/Dockerfile
     container_name: processing_app
     volumes:
-      - .:/app  # Sinkronisasi folder laptop dengan container
+      - .:/app 
     ports:
-      - "8501:8501" # Port untuk Streamlit
-      - "8888:8888" # Port untuk Jupyter Lab
+      - "8501:8501"
+      - "8888:8888"
     depends_on:
       - minio
       - warehouse

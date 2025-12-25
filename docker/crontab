@@ -1,0 +1,2 @@
+0 6 * * * cd /app && /usr/local/bin/python src/ingest.py >> /var/log/cron.log 2>&1
+15 6 * * * cd /app && /usr/local/bin/python src/process_elt.py >> /var/log/cron.log 2>&1
