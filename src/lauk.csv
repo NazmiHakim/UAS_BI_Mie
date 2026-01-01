@@ -1,0 +1,26 @@
+id,nama_item,unit,harga_per_unit,kalori,protein,jenis
+1,Telur Rebus,1 butir,2000,70,6,hewani
+2,Dada Ayam,100 gram,7000,165,31,hewani
+3,Tempe Goreng,1 potong,1000,80,5,nabati
+4,Tahu Putih,1 potong,1000,60,4,nabati
+5,Sawi Hijau,1 ikat,2000,20,1,sayur
+6,Susu UHT Coklat,1 kotak (250ml),6000,160,8,minuman
+7,Sosis Siap Makan,1 buah,2500,90,4,olahan
+8,Kornet Sachet,1 sachet (50g),5000,120,6,olahan
+9,Keju Slice,1 lembar,2500,50,3,tambahan
+10,Bakso Sapi,1 butir,1500,40,3,olahan
+11,Ikan Tongkol Balado,1 potong,5000,110,14,hewani
+12,Ati Ampela,1 pasang,3000,100,10,hewani
+13,Tauge,1 genggam,1000,15,1,sayur
+14,Pakcoy,1 ikat,2000,20,1,sayur
+15,Whey Protein Sachet,1 sachet,12000,120,24,suplemen
+16,Brokoli Rebus,100 gram,4000,35,3,sayur
+17,Udang Rebus,5 ekor sedang,8000,50,10,hewani
+18,Jamur Enoki,1 bungkus kecil,5000,40,3,sayur
+19,Susu Kedelai,1 gelas (250ml),3000,80,7,minuman
+20,Ikan Teri Goreng,1 sdm (15g),2000,50,4,hewani
+21,Bayam Rebus,1 mangkok kecil,2000,25,3,sayur
+22,Daging Sapi Slice,50 gram,8000,125,10,hewani
+23,Kacang Tanah Goreng,1 sdm,1000,90,4,nabati
+24,Edamame,1 genggam,4000,60,6,nabati
+25,Ikan Sarden Kaleng,1 potong besar,4000,90,10,hewani

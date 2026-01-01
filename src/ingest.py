@@ -15,14 +15,14 @@ def upload_to_datalake():
     if not client.bucket_exists(bucket_name):
         client.make_bucket(bucket_name)
         print(f"Bucket '{bucket_name}' berhasil dibuat.")
-    else:
-        print(f"Bucket '{bucket_name}' ditemukan.")
 
     files_to_upload = [
         "data_mie_harga.csv",
-        "data_mie_nutrisi.csv",
         "data_mie_rating.sql",
-        "data_batas_gizi.csv"
+        "data_batas_gizi.csv",
+        "data_diri.csv",             
+        "lauk.csv",                   
+        "data_gizi_mie_protein.csv"   
     ]
 
     for file_name in files_to_upload:
@@ -43,8 +43,4 @@ def upload_to_datalake():
             print(f"File tidak ditemukan: {file_name}")
 
 if __name__ == "__main__":
-    try:
-        upload_to_datalake()
-        print("\nIngestion selesai, Cek MinIO Browser untuk verifikasi.")
-    except Exception as e:
-        print(f"Error : {e}")
+    upload_to_datalake()
