@@ -64,13 +64,17 @@ def save_to_silver(df, filename):
         content_type='application/csv'
     )
     print(f"[SILVER] Saved {filename}")
-
-def calculate_user_needs(row):
+def calculate_user_metrics(row):
+    """
+    Menghitung TDEE, Target Nutrisi, dan Membersihkan Data Kategorikal.
+    """
     bb = float(row['berat_badan'])
     tb = float(row['tinggi_badan'])
     umur = int(row['umur'])
-    gender = row['jenis_kelamin'].lower()
-    tujuan = row['tujuan'].lower()
+    gender = str(row['jenis_kelamin']).lower().strip()
+    
+    tujuan_clean = str(row['tujuan']).lower().strip()
+    pref_prot_clean = str(row['jenis_protein']).lower().strip()
     
     if 'laki' in gender or 'pria' in gender:
         bmr = (10 * bb) + (6.25 * tb) - (5 * umur) + 5
@@ -79,35 +83,40 @@ def calculate_user_needs(row):
         
     tdee = bmr * 1.55
     
-    if 'bulking' in tujuan:
+    if 'bulking' in tujuan_clean:
         target_kalori = tdee + 400
         target_protein = 2.0 * bb 
-    elif 'cutting' in tujuan:
+    elif 'cutting' in tujuan_clean:
         target_kalori = tdee - 400
         target_protein = 2.2 * bb 
     else: 
         target_kalori = tdee
         target_protein = 1.6 * bb
         
-    return pd.Series([int(target_kalori), int(target_protein)])
+    return pd.Series([int(target_kalori), int(target_protein), tujuan_clean, pref_prot_clean])
 
 def process_elt_job():
-    print("ELT Process Started...")
+    print("ELT Process Started (The Brain is Working)...")
     
     df_harga = read_csv_robust("data_mie_harga.csv")
     df_rating = read_sql_line_by_line("data_mie_rating.sql")
     df_nutrisi = read_csv_robust("data_gizi_mie_protein.csv") 
-    
     df_users = read_csv_robust("data_diri.csv")
     df_lauk = read_csv_robust("lauk.csv")
 
     if df_users is not None:
-        df_users[['target_kalori', 'target_protein']] = df_users.apply(calculate_user_needs, axis=1)
+        df_users[['target_kalori', 'target_protein', 'tujuan', 'jenis_protein']] = df_users.apply(calculate_user_metrics, axis=1)
         save_to_silver(df_users, "dim_users_clean.csv")
     
     if df_lauk is not None:
+
         cols = ['harga_per_unit', 'kalori', 'protein']
         for c in cols: df_lauk[c] = pd.to_numeric(df_lauk[c], errors='coerce').fillna(0)
+
+        df_lauk['jenis'] = df_lauk['jenis'].astype(str).str.lower().str.strip()
+        
+        df_lauk['ppi'] = df_lauk['protein'] / (df_lauk['harga_per_unit'] + 1e-9)
+        
         save_to_silver(df_lauk, "dim_lauk_clean.csv")
         
     if 'link_produk' not in df_harga.columns: df_harga['link_produk'] = '-'
@@ -115,7 +124,6 @@ def process_elt_job():
     
     df_rating['join_key'] = (df_rating['Brand'].astype(str) + " " + df_rating['Variety'].astype(str)).str.lower().str.strip()
     df_harga['join_key'] = (df_harga['brand'].astype(str) + " " + df_harga['variety'].astype(str)).str.lower().str.strip()
-    
     df_nutrisi['join_key'] = df_nutrisi['product_name'].astype(str).str.lower().str.strip()
     df_nutrisi = df_nutrisi.drop_duplicates(subset=['join_key'])
     
@@ -152,12 +160,14 @@ def process_elt_job():
     engine = create_engine(POSTGRES_CONN)
     
     df_gold.to_sql('dim_mie_instan', engine, index=False, if_exists='replace')
+    
     if df_users is not None:
         df_users.to_sql('dim_users', engine, index=False, if_exists='replace')
+        
     if df_lauk is not None:
         df_lauk.to_sql('dim_lauk', engine, index=False, if_exists='replace')
         
-    print("Data Warehouse Updated Successfully.")
+    print("Data Warehouse Updated Successfully (Ready to Serve).")
 
 if __name__ == "__main__":
     process_elt_job()
